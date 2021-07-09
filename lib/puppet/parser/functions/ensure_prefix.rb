@@ -1,27 +1,29 @@
 
 module Puppet::Parser::Functions
   newfunction(:ensure_prefix, type: :rvalue, doc: <<-EOS
-This function ensures a prefix for all elements in an array or the keys in a hash.
+    This function ensures a prefix for all elements in an array or the keys in a hash.
 
-*Examples:*
+    *Examples:*
 
-  ensure_prefix({'a' => 1, 'b' => 2, 'p.c' => 3}, 'p.')
+      ensure_prefix({'a' => 1, 'b' => 2, 'p.c' => 3}, 'p.')
 
-Will return:
-  {
-    'p.a' => 1,
-    'p.b' => 2,
-    'p.c' => 3,
-  }
+    Will return:
+      {
+        'p.a' => 1,
+        'p.b' => 2,
+        'p.c' => 3,
+      }
 
-  ensure_prefix(['a', 'p.b', 'c'], 'p.')
+      ensure_prefix(['a', 'p.b', 'c'], 'p.')
 
-Will return:
-  ['p.a', 'p.b', 'p.c']
+    Will return:
+      ['p.a', 'p.b', 'p.c']
 EOS
              ) do |arguments|
-    raise(Puppet::ParseError, 'ensure_prefix(): Wrong number of arguments ' \
-      "given (#{arguments.size} for 2)") if arguments.size < 2
+    if arguments.size < 2
+      raise(Puppet::ParseError, 'ensure_prefix(): Wrong number of arguments ' \
+        "given (#{arguments.size} for 2)")
+    end
 
     enumerable = arguments[0]
 
